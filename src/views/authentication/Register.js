@@ -2,51 +2,46 @@ import React from 'react';
 import { Grid, Box, Typography, Button } from '@mui/material';
 import { Link, useNavigate } from 'react-router-dom';
 
-import GoogleIcon from '@mui/icons-material/Google';
-import FacebookIcon from '@mui/icons-material/Facebook';
-import TwitterIcon from '@mui/icons-material/Twitter';
 
 import CustomTextField from '../../components/forms/custom-elements/CustomTextField';
 import CustomFormLabel from '../../components/forms/custom-elements/CustomFormLabel';
 import logo from '../../assets/images/logos/logo.png'
-import axios from 'axios';
-import Config from '../../utils/Config';
 import { updateUser } from '../../redux/userInfo/Action';
 import { userData } from '../../utils/fakeData';
 import { useDispatch, useSelector } from 'react-redux';
 import GoogleSignin from '../../components/forms/GoogleLogin';
 
 const Register = () => {
-  const [username, setUsername] = React.useState('');
-  const [password, setPassword] = React.useState('');
+
   const [error, setError] = React.useState('');
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [userInfo, setUserInfo] = React.useState(userData);
   const user = useSelector((state) => state.UserInfoReducer);
+  console.log('user', user);
 
-  const handleUsername = (e) => {
-    setUsername(e.target.value.trim());
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    let newData = { ...userInfo };
+    newData[name] = value;
+    setUserInfo(newData);
     setError("")
   }
 
-  const handlePassword = (e) => {
-    setPassword(e.target.value.trim());
-    setError("")
-  }
+
 
   const handleBtnClick = (e) => {
     e.preventDefault()
-    axios.post(Config.getUrl('login'), { username: username, password: password }).then(res => {
-      if (res.status === 200) {
-        dispatch(updateUser(userData));
-        localStorage.setItem("access_token", res.data.accessToken);
-        navigate('/');
+    if (userInfo.password && userInfo.email) {
+      if (userInfo.password.length < 6) {
+        alert('password should be at least 6 character')
+      } else {
+        dispatch(updateUser(userInfo))
+        navigate('/login');
       }
-      setError('Unable to register')
-    }).catch((err) => {
-      setError("Incorrect Username or Password")
-      console.log("unable to login:", err)
-    })
+    } else {
+      alert('email and password required')
+    }
 
   }
 
@@ -74,13 +69,14 @@ const Register = () => {
                 >
 
                   <CustomFormLabel htmlFor="email">Email Adddress</CustomFormLabel>
-                  <CustomTextField onChange={handleUsername} id="email" variant="outlined" fullWidth />
+                  <CustomTextField onChange={handleChange} id="email" name={'email'} variant="outlined" fullWidth />
                   <CustomFormLabel htmlFor="password">Password (6 or more character)</CustomFormLabel>
                   <CustomTextField
-                    onChange={handlePassword}
+                    onChange={handleChange}
                     id="password"
                     variant="outlined"
                     fullWidth
+                    name='password'
                     sx={{
                       mb: 3,
                     }}

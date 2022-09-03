@@ -15,6 +15,8 @@ import { userData } from '../../utils/fakeData';
 import GoogleSignin from '../../components/forms/GoogleLogin';
 
 function Login() {
+  const { isLoading, userInfo } = useSelector(state => state.UserDataReducer);
+  console.log('userInfo', userInfo);
   const [username, setUsername] = React.useState('');
   const [password, setPassword] = React.useState('');
   const [error, setError] = React.useState('');
@@ -35,22 +37,31 @@ function Login() {
   const handleBtnClick = (e) => {
     e.preventDefault()
     console.log(e);
-    axios.post(Config.getUrl('login'), { username: username, password: password }).then(res => {
-      if (res.status === 200) {
-        if (res.data.isFirstTime) {
-          navigate('/reset-password', { state: { newUser: true, username: username } })
-        } else {
-          dispatch(updateUser(userData));
-          localStorage.setItem("access_token", res.data.accessToken);
-          navigate('/');
-        }
+    if (username !== userInfo.email) {
+      alert('incorrect email')
+    } else if (password !== userInfo.password) {
+      alert('incorrect password')
+    } else {
+      dispatch(updateUser(userData));
+      localStorage.setItem("access_token", userInfo.accessToken);
+      navigate('/');
+    }
+    // axios.post(Config.getUrl('login'), { username: username, password: password }).then(res => {
+    //   if (res.status === 200) {
+    //     if (res.data.isFirstTime) {
+    //       navigate('/reset-password', { state: { newUser: true, username: username } })
+    //     } else {
+    //       dispatch(updateUser(userData));
+    //       localStorage.setItem("access_token", res.data.accessToken);
+    //       navigate('/');
+    //     }
 
-      }
-      setError('Unable to login')
-    }).catch((err) => {
-      setError("Incorrect Username or Password")
-      console.log("unable to login:", err)
-    })
+    //   }
+    //   setError('Unable to login')
+    // }).catch((err) => {
+    //   setError("Incorrect Username or Password")
+    //   console.log("unable to login:", err)
+    // })
   }
 
   return (

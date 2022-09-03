@@ -1,6 +1,9 @@
 export const userData = {
     id: 1,
     name: 'Shalini .',
+    email: '',
+    password: '',
+    accessToken: 'ieupro7834sdufspdoifjskeiruo3i45u3io4u3poius98r',
     job: 'Software Developer at Company',
     address: 'Bengaluru, karnataka, India',
     connection: '500+',
