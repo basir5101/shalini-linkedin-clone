@@ -1,0 +1,41 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  ::-webkit-scrollbar {
+    width: 7px;
+    height: 5px;
+  }
+  
+  ::-webkit-scrollbar:horizontal {
+    width: 5px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    background: #f0f1f1;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: #00256f;
+    border-radius: 4px;
+  }
+  
+  ::-moz-scrollbar {
+    width: 10px;
+    scrollbar-width: thin;
+  }
+  
+  ::-moz-scrollbar-track {
+    background: #f0f1f1;
+  }
+  
+  ::-moz-scrollbar-thumb {
+    background: #00256f;
+  }
+  
+  html {
+    box-sizing: border-box;
+    scrollbar-width: 8px;
+  }
